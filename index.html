@@ -14,38 +14,44 @@
 </head>
 
 <body>
-    <header id="header" class="header">
-        <h1>Star Wars: Sabre Duels</h1>
-        <button id="helpBtn" class="btn"></button>
-    </header>
+    <div class="container text-center p-2">
+        <header id="header" class="header jumbotron">
+            <h1>Star Wars: Sabre Duels</h1>
+            <button id="helpBtn" class="btn"></button>
+        </header>
+    </div>
 
-    <Div class="container">
-        <div class="row">
-            <div id="arena" class="arena">
-                <div id="userFigher">
+    <div class="container">
+        <div id="arena" class="row arena">
+            <div class="fighter rounded-lg m-2">
+                
+                <img class="fighterImg" src="https://fsmedia.imgix.net/b4/b1/54/dc/303f/479f/9078/a2cc79bb0cfd/luke-skywalker-and-his-lightsaber.jpeg" alt="luke-fighter">
+                <p class="fighterInfo"><Strong id="fighterName">Luke Skywalker</Strong>  <small>Health: <span id="fighterHealth">160</span>HP</small></p>
+            </div>
 
-                </div>
-
-                <div id="botFigher">
-
-                </div>
+            <div class="fighter rounded-lg m-2">
+                    <img class="fighterImg" src="https://fsmedia.imgix.net/b4/b1/54/dc/303f/479f/9078/a2cc79bb0cfd/luke-skywalker-and-his-lightsaber.jpeg" alt="luke-fighter">
+                    <p class="fighterInfo"><Strong id="fighterName">Luke Skywalker</Strong>  <small>Health: <span id="fighterHealth">160</span>HP</small></p>
             </div>
         </div>
 
-        <div class="row">
-            <div id="fighterBench" class="arena">
+        <div id="actionRow" class="row">
+            <button type="button" class="btn btn-warning m-2">Fight</button>
+            <button type="button" class="btn btn-danger m-2">Defend</button>
+            <button type="button" class="btn btn-dark m-2">Dodge</button>
+        </div>
 
-            </div>
+        <div id="fighterBench" class="row fighterBench">
+            
         </div>
 
         <footer>
 
         </footer>
 
+    </div>
 
-
-
-    </Div>
+    <script src="assets/javascript/game.js"></script>
 
 </body>
 
