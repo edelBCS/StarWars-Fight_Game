@@ -44,7 +44,7 @@ var fighters = {
 var fightBench = {
     //loads fighter into the game
     "loadFighter" : function(imgSrc, imgAlt, fighterName, health) {
-        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg mx-2'></div>");
+        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg mx-auto'></div>");
         $("#" + fighterName).append("<img class='fighterImg' src='" + imgSrc + "' alt='" + imgAlt + "'>");
         $("#" + fighterName).append("<p class='fighterInfo'><Strong class='fighterName'>" + fighterName + "</Strong>  <small>Health: <span id='fighterHealth'>" + health + "</span>HP</small></p>");
         $("#" + fighterName).append("<span id='deathX'>X</span>");
@@ -69,7 +69,6 @@ var fightBench = {
         });
         
         fightStats.userFighter = fighters[fighter];
-        $("#" + fighter).css("disabled", "true");
         $("#fightArea h2").text("Choose Your Opponent");
         $.extend(fightStats.userFighter, {"multiplyer" : 1});
     },
@@ -79,7 +78,6 @@ var fightBench = {
             $("#" + fighter).prependTo("#botArea").fadeIn(1000);
         });
         fightStats.botFighter = fighters[fighter];
-        $("#" + fighter).css("disabled", "true");
         fightStats.fightActive = true;
         $("#fightArea h2").text("Fight");
     }
@@ -104,7 +102,7 @@ var fightActions = {
         if(fightStats.userFighter.hp > 0 && fightStats.botFighter.hp === 0){
             fightStats.fightActive = false;      
             $("#" + fightStats.botFighter.name).fadeOut(1000, function(){
-                $("#" + fightStats.botFighter.name).prependTo("#fighterBench").fadeIn(1000);           
+                $("#" + fightStats.botFighter.name).prependTo("#fighterBench").fadeIn(1000);
                 $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
                 fightStats.deadFighters.push(fightStats.botFighter.name);
                 fightStats.botFighter = {};
@@ -120,12 +118,15 @@ var fightActions = {
             });
         //Player Lost
         }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp > 0){
-            fightStats.fightActive = false;
+            fightStats.fightActive = false;            
+            $("#" + fightStats.userFighter.name + " #deathX").css("display", "block");
             $("#fightArea").html("<h2>Fight</h2>");
             $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " has defeated you.");
         //Both Lost
         }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp === 0){
-            fightStats.fightActive = false;
+            fightStats.fightActive = false;            
+            $("#" + fightStats.userFighter.name + " #deathX").css("display", "block");
+            $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
             $("#fightArea").html("<h2>Fight</h2>");
             $("#fightArea").append("<br><br><br>You and " + fightStats.botFighter.name + " have slain each other.");
         }
