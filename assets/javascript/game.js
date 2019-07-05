@@ -243,7 +243,7 @@ $("#fightBtn").on("click", function(){
             fightActions.updateHealth();
         //Bot Dodges
         }else if(botMode === "dodge"){
-            //Dodge has a 50% chance to cause attacker to miss,  however if you fail you take 150% damage
+            //Dodge has a 50% chance to cause attacker to miss and the attacker takes damage,  however if you fail you take 150% of attacker's damage
             if(Math.floor((Math.random() * 100) + 1) < 50){
                 fightActions.blinkFighter(fightStats.botFighter.name);
                 fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 1.5);
