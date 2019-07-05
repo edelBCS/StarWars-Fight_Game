@@ -64,7 +64,10 @@ var fightBench = {
     },
 
     "moveFighterToUser" : function(fighter){
-        $("#" + fighter).prependTo("#arena");
+        $("#" + fighter).fadeOut(1000, function(){
+            $("#" + fighter).prependTo("#playerArea").fadeIn(1000);
+        });
+        
         fightStats.userFighter = fighters[fighter];
         $("#" + fighter).css("disabled", "true");
         $("#fightArea h2").text("Choose Your Opponent");
@@ -72,7 +75,9 @@ var fightBench = {
     },
 
     "moveFighterToBot" : function(fighter){
-        $("#" + fighter).appendTo("#arena");
+        $("#" + fighter).fadeOut(1000, function(){
+            $("#" + fighter).prependTo("#botArea").fadeIn(1000);
+        });
         fightStats.botFighter = fighters[fighter];
         $("#" + fighter).css("disabled", "true");
         fightStats.fightActive = true;
@@ -97,15 +102,20 @@ var fightActions = {
     "checkForWinner" : function(){
         //Player Won
         if(fightStats.userFighter.hp > 0 && fightStats.botFighter.hp === 0){
-            fightStats.fightActive = false;        
-            $("#" + fightStats.botFighter.name).appendTo("#fighterBench");            
-            $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
-            fightStats.deadFighters.push(fightStats.botFighter.name);
-            fightStats.botFighter = {};
-            ++fightStats.userFighter.multiplyer;
-            ++fightStats.userFighter.multiplyer;
-            $("#fightArea").html("<h2>Fight</h2>");
-            $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>Choose you next opponent.");
+            fightStats.fightActive = false;      
+            $("#" + fightStats.botFighter.name).fadeOut(1000, function(){
+                $("#" + fightStats.botFighter.name).prependTo("#fighterBench").fadeIn(1000);           
+                $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
+                fightStats.deadFighters.push(fightStats.botFighter.name);
+                fightStats.botFighter = {};
+                ++fightStats.userFighter.multiplyer;
+                ++fightStats.userFighter.multiplyer;
+                $("#fightArea").html("<h2>Fight</h2>");
+                $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>Choose you next opponent.");
+            });  
+            
+            
+            
         //Player Lost
         }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp > 0){
             fightStats.fightActive = false;

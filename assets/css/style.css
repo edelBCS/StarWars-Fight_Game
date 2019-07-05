@@ -80,3 +80,13 @@ h1 {
     top: -10px;
 }
 
+.fadeOut {
+    animation-name: fadeout;
+    animation-duration: 2s;
+}
+
+@keyframes fadeout {
+    0%{opacity: 1;}
+    100%{opacity: 0;}
+}
+
