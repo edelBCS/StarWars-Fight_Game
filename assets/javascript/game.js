@@ -7,28 +7,40 @@ var fighters = {
         "image" : "assets/images/luke-img.jpeg",
         "imgAlt" : "luke-img",
         "name" : "Luke",
-        "hp" : 160,        
+        "hp" : 150,   
+        "power" : 25,
+        "limit" : 5,
+        "defense" : 5
     },
 
     "Obi-Wan" : {
         "image" : "assets/images/obi-wan-img.jpg",
         "imgAlt" : "Obi-img",
         "name" : "Obi-Wan",
-        "hp" : 160,        
+        "hp" : 125, 
+        "power" : 50,
+        "limit" : 3,
+        "defense" : 6      
     },
 
     "Boba-Fett" : {
         "image" : "assets/images/boba-fett-img.jpg",
         "imgAlt" : "boba-img",
         "name" : "Boba-Fett",
-        "hp" : 160,        
+        "hp" : 200, 
+        "power" : 30,
+        "limit" : 6,
+        "defense" : 3      
     },
 
     "Darth-Maul" : {
         "image" : "assets/images/darth-maul-img.jpg",
         "imgAlt" : "Maul-img",
         "name" : "Darth-Maul",
-        "hp" : 160,        
+        "hp" : 175, 
+        "power" : 55,
+        "limit" : 8,
+        "defense" : 7      
     }    
 }
 
@@ -53,12 +65,40 @@ var fightBench = {
         this.addToBench(fighters["Boba-Fett"]);
         this.addToBench(fighters["Darth-Maul"]);
     },
+
+    "moveFighterToUser" : function(fighter){
+        $("#" + fighter).prependTo("#arena");
+        fightStats.userFighter = fighters[fighter];
+        $("#" + fighter).css("disabled", "true");
+        $("#fightArea h2").text("Choose Your Opponent");
+        $.extend(fightStats.userFighter, {"currentLimit" : 0});
+    },
+
+    "moveFighterToBot" : function(fighter){
+        $("#" + fighter).appendTo("#arena");
+        fightStats.botFighter = fighters[fighter];
+        $("#" + fighter).css("disabled", "true");
+        $.extend(fightStats.userFighter, {"currentLimit" : 0});
+    }
+}
+
+var fightActions = {
+    "fightModes" : ["fight", "defend", "dodge"],
+
+    "selectBotFightMode" : function(){
+        return this.fightModes[Math.floor((Math.random() * 3))];
+    },
+
+    "updateHealth" : function(){
+        $("#" + fightStats.userFighter.name + " .fighterInfo #fighterHealth").text(fightStats.userFighter.hp);        
+        $("#" + fightStats.botFighter.name + " .fighterInfo #fighterHealth").text(fightStats.botFighter.hp);
+    }
 }
 
 //keeps stats for all fights for duration of the game
 var fightStats = {
     "userFighter" : {},
-    "botFighter" : "",
+    "botFighter" : {}
 }
 
 
@@ -68,50 +108,67 @@ var fightStats = {
 fightBench.fillUpBench();
 
 $("#Luke").on("click", function(){
-    console.log(fightStats.userFighter)
     if(Object.entries(fightStats.userFighter).length === 0){
-        $("#Luke").prependTo("#arena");
-        fightStats.userFighter = fighters.Luke;
-        $("#Luke").css("disabled", "true");
+        fightBench.moveFighterToUser("Luke");
     }else if(Object.entries(fightStats.botFighter).length === 0){
-        $("#Luke").appendTo("#arena");
-        fightStats.botFighter = fighters.Luke;
-        $("#Luke").css("disabled", "true");
+        fightBench.moveFighterToBot("Luke");
     }  
 });
 
 $("#Obi-Wan").on("click", function(){
     if(Object.entries(fightStats.userFighter).length === 0){
-        $("#Obi-Wan").prependTo("#arena");
-        fightStats.userFighter = fighters.Luke;
-        $("#Obi-Wan").css("disabled", "true");
+        fightBench.moveFighterToUser("Obi-Wan");
     }else if(Object.entries(fightStats.botFighter).length === 0){
-        $("#Obi-Wan").appendTo("#arena");
-        fightStats.botFighter = fighters.Luke;
-        $("#Obi-Wan").css("disabled", "true");
+        fightBench.moveFighterToBot("Obi-Wan");
     }    
 });
 
 $("#Darth-Maul").on("click", function(){
     if(Object.entries(fightStats.userFighter).length === 0){
-        $("#Darth-Maul").prependTo("#arena");
-        fightStats.userFighter = fighters.Luke;
-        $("#Darth-Maul").css("disabled", "true");
+        fightBench.moveFighterToUser("Darth-Maul");
     }else if(Object.entries(fightStats.botFighter).length === 0){
-        $("#Darth-Maul").appendTo("#arena");
-        fightStats.botFighter = fighters.Luke;
-        $("#Darth-Maul").css("disabled", "true");
+        fightBench.moveFighterToBot("Darth-Maul");
     }    
 });
 
 $("#Boba-Fett").on("click", function(){
     if(Object.entries(fightStats.userFighter).length === 0){
-        $("#Boba-Fett").prependTo("#arena");
-        fightStats.userFighter = fighters.Luke;
-        $("#Boba-Fett").css("disabled", "true");
+        fightBench.moveFighterToUser("Boba-Fett");
     }else if(Object.entries(fightStats.botFighter).length === 0){
-        $("#Boba-Fett").appendTo("#arena");
-        fightStats.botFighter = fighters.Luke;
-        $("#Boba-Fett").css("disabled", "true");
+        fightBench.moveFighterToBot("Boba-Fett");
     }    
 });
+
+//console.log(fightStats);
+
+console.log(fightStats);
+
+//User Fights
+$("#fightBtn").on("click", function(){
+    var botMode = fightActions.selectBotFightMode();
+    //Bot Fights
+    if(botMode === "fight"){        
+        fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
+        fightStats.botFighter.hp = fightStats.botFighter.hp - fightStats.userFighter.power;
+        fightActions.updateHealth();
+    //Bot Blocks
+    }else if(botMode === "defend"){
+        fightStats.botFighter.hp = fightStats.botFighter.hp - (fightStats.userFighter.power - (((Math.floor(Math.random() * fightStats.botFighter.defense)+1) / 10) * fightStats.userFighter.power));
+        fightActions.updateHealth();
+    //Bot Dodges
+    }else if(botMode === "dodge"){
+        
+    }
+    console.log(botMode);
+    console.log(fightStats);
+
+});
+
+$("#defendBtn").on("click", function(){
+
+});
+
+$("#dodgeBtn").on("click", function(){
+
+});
+
