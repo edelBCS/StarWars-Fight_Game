@@ -79,6 +79,7 @@ var fightBench = {
         fightStats.botFighter = fighters[fighter];
         $("#" + fighter).css("disabled", "true");
         $.extend(fightStats.userFighter, {"currentLimit" : 0});
+        $("#fightArea h2").text("Fight");
     }
 }
 
@@ -90,6 +91,8 @@ var fightActions = {
     },
 
     "updateHealth" : function(){
+        (fightStats.userFighter.hp < 0)?(fightStats.userFighter.hp = 0):"";
+        (fightStats.botFighter.hp < 0)?(fightStats.botFighter.hp = 0):"";
         $("#" + fightStats.userFighter.name + " .fighterInfo #fighterHealth").text(fightStats.userFighter.hp);        
         $("#" + fightStats.botFighter.name + " .fighterInfo #fighterHealth").text(fightStats.botFighter.hp);
     }
@@ -146,20 +149,35 @@ console.log(fightStats);
 //User Fights
 $("#fightBtn").on("click", function(){
     var botMode = fightActions.selectBotFightMode();
+    console.log(botMode);
+
     //Bot Fights
     if(botMode === "fight"){        
         fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
         fightStats.botFighter.hp = fightStats.botFighter.hp - fightStats.userFighter.power;
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>Player takes " + fightStats.botFighter.power + " damage.");
+        $("#fightArea").append("<br><br><br>Bot takes " + fightStats.userFighter.power + " damage.");
         fightActions.updateHealth();
     //Bot Blocks
     }else if(botMode === "defend"){
-        fightStats.botFighter.hp = fightStats.botFighter.hp - (fightStats.userFighter.power - (((Math.floor(Math.random() * fightStats.botFighter.defense)+1) / 10) * fightStats.userFighter.power));
+        var damage = fightStats.userFighter.power - Math.floor(((Math.random() * fightStats.botFighter.defense) / 10) * fightStats.userFighter.power);
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>Bot defends the attack.<br>Takes " + damage + " damage.");
+        fightStats.botFighter.hp = fightStats.botFighter.hp - damage;
         fightActions.updateHealth();
     //Bot Dodges
     }else if(botMode === "dodge"){
-        
+        if(Math.floor((Math.random() * 100) + 1) < 50){
+            fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.5);
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>Bot tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
+        }else{
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>Bot Dodges the Attack");
+        }
+        fightActions.updateHealth();
     }
-    console.log(botMode);
     console.log(fightStats);
 
 });
