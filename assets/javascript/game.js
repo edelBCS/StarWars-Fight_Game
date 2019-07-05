@@ -248,10 +248,13 @@ $("#fightBtn").on("click", function(){
                 fightActions.blinkFighter(fightStats.botFighter.name);
                 fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 1.5);
                 $("#fightArea").html("<h2>Fight</h2>");
-                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
+                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 1.5) + " damage.");
             }else{
+                fightActions.blinkFighter(fightStats.userFighter.name);
+                fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 0.25);
                 $("#fightArea").html("<h2>Fight</h2>");
-                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " Dodges the Attack");
+                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " Dodges your Attack.");
+                $("#fightArea").append("<br> You stumble and take " + Math.floor(fightStats.botFighter.power * 0.25) + " damage.");
             }
             fightActions.updateHealth();
         }
@@ -295,10 +298,13 @@ $("#dodgeBtn").on("click", function(){
                 fightActions.blinkFighter(fightStats.userFighter.name);
                 fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 1.5);
                 $("#fightArea").html("<h2>Fight</h2>");
-                $("#fightArea").append("<br><br><br>You try to dodge but you are not quick enough.<br>You take " + Math.floor(fightStats.botFighter.power * 0.5) + " damage.");
+                $("#fightArea").append("<br><br><br>You try to dodge but you are not quick enough.<br>You take " + Math.floor(fightStats.botFighter.power * 1.5) + " damage.");
             }else{
+                fightActions.blinkFighter(fightStats.botFighter.name);
+                fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.25);
                 $("#fightArea").html("<h2>Fight</h2>");
-                $("#fightArea").append("<br><br><br>You Dodge " + fightStats.botFighter.name + "'s Attack");
+                $("#fightArea").append("<br><br><br>You Dodge " + fightStats.botFighter.name + "'s Attack.");
+                $("#fightArea").append("<br>" + fightStats.botFighter.name + " stumbles and takes " + Math.floor(fightStats.userFighter.power) * 0.25 + " of damage.");
             }
             fightActions.updateHealth();
         }else if(botMode === "defend"){
