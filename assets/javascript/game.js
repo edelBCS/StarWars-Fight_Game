@@ -293,7 +293,7 @@ $("#dodgeBtn").on("click", function(){
         if(botMode === "fight"){
             if(Math.floor((Math.random() * 100) + 1) < 50){
                 fightActions.blinkFighter(fightStats.userFighter.name);
-                fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 0.5);
+                fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 1.5);
                 $("#fightArea").html("<h2>Fight</h2>");
                 $("#fightArea").append("<br><br><br>You try to dodge but you are not quick enough.<br>You take " + Math.floor(fightStats.botFighter.power * 0.5) + " damage.");
             }else{
