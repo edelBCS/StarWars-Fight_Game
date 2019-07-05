@@ -44,7 +44,7 @@ var fighters = {
 var fightBench = {
     //loads fighter into the game
     "loadFighter" : function(imgSrc, imgAlt, fighterName, health) {
-        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg m-2'></div>");
+        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg mx-2'></div>");
         $("#" + fighterName).append("<img class='fighterImg' src='" + imgSrc + "' alt='" + imgAlt + "'>");
         $("#" + fighterName).append("<p class='fighterInfo'><Strong class='fighterName'>" + fighterName + "</Strong>  <small>Health: <span id='fighterHealth'>" + health + "</span>HP</small></p>");
         $("#" + fighterName).append("<span id='deathX'>X</span>");
@@ -110,12 +110,14 @@ var fightActions = {
                 fightStats.botFighter = {};
                 ++fightStats.userFighter.multiplyer;
                 ++fightStats.userFighter.multiplyer;
-                $("#fightArea").html("<h2>Fight</h2>");
-                $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>Choose you next opponent.");
-            });  
-            
-            
-            
+                if(fightStats.deadFighters.length === 3){
+                    $("#fightArea").html("<h2>Fight</h2>");
+                    $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>You have defeated everyone.");
+                }else{
+                    $("#fightArea").html("<h2>Fight</h2>");
+                    $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>Choose you next opponent.");
+                }
+            });
         //Player Lost
         }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp > 0){
             fightStats.fightActive = false;
@@ -127,6 +129,15 @@ var fightActions = {
             $("#fightArea").html("<h2>Fight</h2>");
             $("#fightArea").append("<br><br><br>You and " + fightStats.botFighter.name + " have slain each other.");
         }
+    },
+
+    "blinkFighter" : function(fighter){
+        $("#" + fighter).fadeOut(100, function(){});     
+        $("#" + fighter).fadeIn(100, function(){});
+        $("#" + fighter).fadeOut(100, function(){});
+        $("#" + fighter).fadeIn(100, function(){});
+        $("#" + fighter).fadeOut(100, function(){});
+        $("#" + fighter).fadeIn(100, function(){});  
     }
 }
 
@@ -208,7 +219,9 @@ $("#fightBtn").on("click", function(){
         console.log(botMode);
 
         //Bot Fights
-        if(botMode === "fight"){        
+        if(botMode === "fight"){
+            fightActions.blinkFighter(fightStats.userFighter.name);
+            fightActions.blinkFighter(fightStats.botFighter.name);
             fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
             fightStats.botFighter.hp = fightStats.botFighter.hp - (fightStats.userFighter.power * fightStats.userFighter.multiplyer);
             $("#fightArea").html("<h2>Fight</h2>");
@@ -217,6 +230,7 @@ $("#fightBtn").on("click", function(){
             fightActions.updateHealth();
         //Bot Blocks
         }else if(botMode === "defend"){
+            fightActions.blinkFighter(fightStats.botFighter.name);
             var damage = fightStats.userFighter.power - Math.floor(((Math.random() * fightStats.botFighter.defense) / 10) * fightStats.userFighter.power);
             $("#fightArea").html("<h2>Fight</h2>");
             $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " defends the attack.<br>Takes " + damage + " damage.");
@@ -225,6 +239,7 @@ $("#fightBtn").on("click", function(){
         //Bot Dodges
         }else if(botMode === "dodge"){
             if(Math.floor((Math.random() * 100) + 1) < 50){
+                fightActions.blinkFighter(fightStats.botFighter.name);
                 fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.5);
                 $("#fightArea").html("<h2>Fight</h2>");
                 $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
@@ -245,6 +260,7 @@ $("#defendBtn").on("click", function(){
         console.log(botMode);
 
         if(botMode === "fight"){
+            fightActions.blinkFighter(fightStats.userFighter.name);
             var damage = fightStats.botFighter.power - Math.floor(((Math.random() * fightStats.userFighter.defense) / 10) * fightStats.botFighter.power);
             $("#fightArea").html("<h2>Fight</h2>");
             $("#fightArea").append("<br><br><br>You defend the attack and take " + damage + " damage.");
@@ -268,6 +284,7 @@ $("#dodgeBtn").on("click", function(){
 
         if(botMode === "fight"){
             if(Math.floor((Math.random() * 100) + 1) < 50){
+                fightActions.blinkFighter(fightStats.userFighter.name);
                 fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 0.5);
                 $("#fightArea").html("<h2>Fight</h2>");
                 $("#fightArea").append("<br><br><br>You try to dodge but you are not quick enough.<br>You take " + Math.floor(fightStats.botFighter.power * 0.5) + " damage.");
