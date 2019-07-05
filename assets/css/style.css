@@ -1,6 +1,8 @@
 body {
     background: url(../images/background.jpg);
-    background-repeat: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     background-color: lightslategray;
     background-blend-mode: screen;
     font-family: 'Russo One', sans-serif;    
@@ -8,7 +10,9 @@ body {
 }
 
 h1 {
+    display: inline-block;
     font-size: 70px;
+    border: solid 10px white;
 }
 
 #header {
@@ -17,6 +21,7 @@ h1 {
 
 #fightArea {
     background-color: rgba(0, 0, 0, 0.25);
+    height: 250px;
 }
 
 .fighter{
