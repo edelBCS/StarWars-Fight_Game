@@ -16,13 +16,27 @@
     color: white;
     margin: auto;
     text-align: center;
-    background-color: royalblue;
+    background-color: darkblue;
     bottom: 0;
     width: 100%;
     padding: 10px 0px;
 }
 
-#Luke .fighterImg{
+#Luke .fighterImg {
     left: -30px;
     top: -20px;
 }
+
+#Obi-Wan .fighterImg {
+    left: -100px;
+}
+
+#Boba-Fett .fighterImg {
+    left: -175px;
+}
+
+#Darth-Maul .fighterImg {
+    left: -110px;
+    top: -10px;
+}
+
