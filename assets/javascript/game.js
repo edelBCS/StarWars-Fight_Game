@@ -63,6 +63,7 @@ var fightBench = {
         this.addToBench(fighters["Darth-Maul"]);
     },
 
+    //moves fighter from bench to playerArea
     "moveFighterToUser" : function(fighter){
         $("#" + fighter).fadeOut(1000, function(){
             $("#" + fighter).prependTo("#playerArea").fadeIn(1000);
@@ -72,7 +73,7 @@ var fightBench = {
         $("#fightArea h2").text("Choose Your Opponent");
         $.extend(fightStats.userFighter, {"multiplyer" : 1});
     },
-
+    //move fighter from bench to bot area
     "moveFighterToBot" : function(fighter){
         $("#" + fighter).fadeOut(1000, function(){
             $("#" + fighter).prependTo("#botArea").fadeIn(1000);
@@ -84,12 +85,15 @@ var fightBench = {
 }
 
 var fightActions = {
+    //these are the fight options for the bot
     "fightModes" : ["fight", "defend", "dodge"],
 
+    //this randomly selects the fight mode for the bot
     "selectBotFightMode" : function(){
         return this.fightModes[Math.floor((Math.random() * 3))];
     },
 
+    //updates the HP counters and displays
     "updateHealth" : function(){
         (fightStats.userFighter.hp < 0)?(fightStats.userFighter.hp = 0):"";
         (fightStats.botFighter.hp < 0)?(fightStats.botFighter.hp = 0):"";
@@ -97,6 +101,7 @@ var fightActions = {
         $("#" + fightStats.botFighter.name + " .fighterInfo #fighterHealth").text(fightStats.botFighter.hp);
     },
 
+    //checks to see if anyone has won the fight
     "checkForWinner" : function(){
         //Player Won
         if(fightStats.userFighter.hp > 0 && fightStats.botFighter.hp === 0){
@@ -132,6 +137,7 @@ var fightActions = {
         }
     },
 
+    //cause fighter the blink when taking damage
     "blinkFighter" : function(fighter){
         $("#" + fighter).fadeOut(100, function(){});     
         $("#" + fighter).fadeIn(100, function(){});
@@ -209,8 +215,6 @@ $("#Boba-Fett").on("click", function(){
     }
 });
 
-//console.log(fightStats);
-
 console.log(fightStats);
 
 //User Fights
@@ -239,9 +243,10 @@ $("#fightBtn").on("click", function(){
             fightActions.updateHealth();
         //Bot Dodges
         }else if(botMode === "dodge"){
+            //Dodge has a 50% chance to cause attacker to miss,  however if you fail you take 150% damage
             if(Math.floor((Math.random() * 100) + 1) < 50){
                 fightActions.blinkFighter(fightStats.botFighter.name);
-                fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.5);
+                fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 1.5);
                 $("#fightArea").html("<h2>Fight</h2>");
                 $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
             }else{
@@ -255,6 +260,7 @@ $("#fightBtn").on("click", function(){
     }
 });
 
+//player defends
 $("#defendBtn").on("click", function(){
     if(fightStats.fightActive === true){
         var botMode = fightActions.selectBotFightMode();
@@ -278,6 +284,7 @@ $("#defendBtn").on("click", function(){
     }
 });
 
+//player dodges
 $("#dodgeBtn").on("click", function(){
     if(fightStats.fightActive === true){
         var botMode = fightActions.selectBotFightMode();
