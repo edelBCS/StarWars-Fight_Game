@@ -6,6 +6,7 @@ After you defeat your opponent choose another.  Once you defeat all other fighte
 
 ## FIGHT
 If your opponent fights back you deal damage to each other.
+
 You opponent can also dodge or defend when you attack.
 
 ## DEFEND
