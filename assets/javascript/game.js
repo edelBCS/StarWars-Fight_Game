@@ -8,9 +8,8 @@ var fighters = {
         "imgAlt" : "luke-img",
         "name" : "Luke",
         "hp" : 150,   
-        "power" : 25,
-        "limit" : 5,
-        "defense" : 5
+        "power" : 40,
+        "defense" : 4
     },
 
     "Obi-Wan" : {
@@ -19,8 +18,7 @@ var fighters = {
         "name" : "Obi-Wan",
         "hp" : 125, 
         "power" : 50,
-        "limit" : 3,
-        "defense" : 6      
+        "defense" : 8      
     },
 
     "Boba-Fett" : {
@@ -29,7 +27,6 @@ var fighters = {
         "name" : "Boba-Fett",
         "hp" : 200, 
         "power" : 30,
-        "limit" : 6,
         "defense" : 3      
     },
 
@@ -39,7 +36,6 @@ var fighters = {
         "name" : "Darth-Maul",
         "hp" : 175, 
         "power" : 55,
-        "limit" : 8,
         "defense" : 7      
     }    
 }
@@ -51,6 +47,7 @@ var fightBench = {
         $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg m-2'></div>");
         $("#" + fighterName).append("<img class='fighterImg' src='" + imgSrc + "' alt='" + imgAlt + "'>");
         $("#" + fighterName).append("<p class='fighterInfo'><Strong class='fighterName'>" + fighterName + "</Strong>  <small>Health: <span id='fighterHealth'>" + health + "</span>HP</small></p>");
+        $("#" + fighterName).append("<span id='deathX'>X</span>");
     },
 
     //addes fighter to the bench to be selected
@@ -71,14 +68,14 @@ var fightBench = {
         fightStats.userFighter = fighters[fighter];
         $("#" + fighter).css("disabled", "true");
         $("#fightArea h2").text("Choose Your Opponent");
-        $.extend(fightStats.userFighter, {"currentLimit" : 0});
+        $.extend(fightStats.userFighter, {"multiplyer" : 1});
     },
 
     "moveFighterToBot" : function(fighter){
         $("#" + fighter).appendTo("#arena");
         fightStats.botFighter = fighters[fighter];
         $("#" + fighter).css("disabled", "true");
-        $.extend(fightStats.userFighter, {"currentLimit" : 0});
+        fightStats.fightActive = true;
         $("#fightArea h2").text("Fight");
     }
 }
@@ -95,13 +92,40 @@ var fightActions = {
         (fightStats.botFighter.hp < 0)?(fightStats.botFighter.hp = 0):"";
         $("#" + fightStats.userFighter.name + " .fighterInfo #fighterHealth").text(fightStats.userFighter.hp);        
         $("#" + fightStats.botFighter.name + " .fighterInfo #fighterHealth").text(fightStats.botFighter.hp);
+    },
+
+    "checkForWinner" : function(){
+        //Player Won
+        if(fightStats.userFighter.hp > 0 && fightStats.botFighter.hp === 0){
+            fightStats.fightActive = false;        
+            $("#" + fightStats.botFighter.name).appendTo("#fighterBench");            
+            $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
+            fightStats.deadFighters.push(fightStats.botFighter.name);
+            fightStats.botFighter = {};
+            ++fightStats.userFighter.multiplyer;
+            ++fightStats.userFighter.multiplyer;
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You are VICTORIOUS.<br>Choose you next opponent.");
+        //Player Lost
+        }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp > 0){
+            fightStats.fightActive = false;
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " has defeated you.");
+        //Both Lost
+        }else if(fightStats.userFighter.hp === 0 && fightStats.botFighter.hp === 0){
+            fightStats.fightActive = false;
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You and " + fightStats.botFighter.name + " have slain each other.");
+        }
     }
 }
 
 //keeps stats for all fights for duration of the game
 var fightStats = {
     "userFighter" : {},
-    "botFighter" : {}
+    "botFighter" : {},
+    "fightActive" : false,
+    "deadFighters" : []
 }
 
 
@@ -111,35 +135,56 @@ var fightStats = {
 fightBench.fillUpBench();
 
 $("#Luke").on("click", function(){
-    if(Object.entries(fightStats.userFighter).length === 0){
-        fightBench.moveFighterToUser("Luke");
-    }else if(Object.entries(fightStats.botFighter).length === 0){
-        fightBench.moveFighterToBot("Luke");
-    }  
+    console.log(fightStats.deadFighters.indexOf("Luke"));
+    if(fightStats.deadFighters.indexOf("Luke") === -1){
+        if(Object.entries(fightStats.userFighter).length === 0){
+            fightBench.moveFighterToUser("Luke");
+        }else if(Object.entries(fightStats.botFighter).length === 0){
+            fightBench.moveFighterToBot("Luke");
+        }
+    }else{
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
+    } 
 });
 
 $("#Obi-Wan").on("click", function(){
-    if(Object.entries(fightStats.userFighter).length === 0){
-        fightBench.moveFighterToUser("Obi-Wan");
-    }else if(Object.entries(fightStats.botFighter).length === 0){
-        fightBench.moveFighterToBot("Obi-Wan");
+    if(fightStats.deadFighters.indexOf("Obi-Wan") === -1){
+        if(Object.entries(fightStats.userFighter).length === 0){
+            fightBench.moveFighterToUser("Obi-Wan");
+        }else if(Object.entries(fightStats.botFighter).length === 0){
+            fightBench.moveFighterToBot("Obi-Wan");
+        }
+    }else{
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
     }    
 });
 
 $("#Darth-Maul").on("click", function(){
-    if(Object.entries(fightStats.userFighter).length === 0){
-        fightBench.moveFighterToUser("Darth-Maul");
-    }else if(Object.entries(fightStats.botFighter).length === 0){
-        fightBench.moveFighterToBot("Darth-Maul");
-    }    
+    if(fightStats.deadFighters.indexOf("Darth-Maul") === -1){
+        if(Object.entries(fightStats.userFighter).length === 0){
+            fightBench.moveFighterToUser("Darth-Maul");
+        }else if(Object.entries(fightStats.botFighter).length === 0){
+            fightBench.moveFighterToBot("Darth-Maul");
+        }   
+    }else{
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
+    } 
 });
 
 $("#Boba-Fett").on("click", function(){
-    if(Object.entries(fightStats.userFighter).length === 0){
-        fightBench.moveFighterToUser("Boba-Fett");
-    }else if(Object.entries(fightStats.botFighter).length === 0){
-        fightBench.moveFighterToBot("Boba-Fett");
-    }    
+    if(fightStats.deadFighters.indexOf("Boba-Fett") === -1){
+        if(Object.entries(fightStats.userFighter).length === 0){
+            fightBench.moveFighterToUser("Boba-Fett");
+        }else if(Object.entries(fightStats.botFighter).length === 0){
+            fightBench.moveFighterToBot("Boba-Fett");
+        }    
+    }else{
+        $("#fightArea").html("<h2>Fight</h2>");
+        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
+    }
 });
 
 //console.log(fightStats);
@@ -148,45 +193,87 @@ console.log(fightStats);
 
 //User Fights
 $("#fightBtn").on("click", function(){
-    var botMode = fightActions.selectBotFightMode();
-    console.log(botMode);
+    if(fightStats.fightActive === true){
+        var botMode = fightActions.selectBotFightMode();
+        console.log(botMode);
 
-    //Bot Fights
-    if(botMode === "fight"){        
-        fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
-        fightStats.botFighter.hp = fightStats.botFighter.hp - fightStats.userFighter.power;
-        $("#fightArea").html("<h2>Fight</h2>");
-        $("#fightArea").append("<br><br><br>Player takes " + fightStats.botFighter.power + " damage.");
-        $("#fightArea").append("<br><br><br>Bot takes " + fightStats.userFighter.power + " damage.");
-        fightActions.updateHealth();
-    //Bot Blocks
-    }else if(botMode === "defend"){
-        var damage = fightStats.userFighter.power - Math.floor(((Math.random() * fightStats.botFighter.defense) / 10) * fightStats.userFighter.power);
-        $("#fightArea").html("<h2>Fight</h2>");
-        $("#fightArea").append("<br><br><br>Bot defends the attack.<br>Takes " + damage + " damage.");
-        fightStats.botFighter.hp = fightStats.botFighter.hp - damage;
-        fightActions.updateHealth();
-    //Bot Dodges
-    }else if(botMode === "dodge"){
-        if(Math.floor((Math.random() * 100) + 1) < 50){
-            fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.5);
+        //Bot Fights
+        if(botMode === "fight"){        
+            fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
+            fightStats.botFighter.hp = fightStats.botFighter.hp - (fightStats.userFighter.power * fightStats.userFighter.multiplyer);
             $("#fightArea").html("<h2>Fight</h2>");
-            $("#fightArea").append("<br><br><br>Bot tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
-        }else{
+            $("#fightArea").append("<br><br><br>You take " + fightStats.botFighter.power + " damage.");
+            $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " takes " + fightStats.userFighter.power * fightStats.userFighter.multiplyer + " damage.");
+            fightActions.updateHealth();
+        //Bot Blocks
+        }else if(botMode === "defend"){
+            var damage = fightStats.userFighter.power - Math.floor(((Math.random() * fightStats.botFighter.defense) / 10) * fightStats.userFighter.power);
             $("#fightArea").html("<h2>Fight</h2>");
-            $("#fightArea").append("<br><br><br>Bot Dodges the Attack");
+            $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " defends the attack.<br>Takes " + damage + " damage.");
+            fightStats.botFighter.hp = fightStats.botFighter.hp - damage;
+            fightActions.updateHealth();
+        //Bot Dodges
+        }else if(botMode === "dodge"){
+            if(Math.floor((Math.random() * 100) + 1) < 50){
+                fightStats.botFighter.hp = fightStats.botFighter.hp - Math.floor(fightStats.userFighter.power * 0.5);
+                $("#fightArea").html("<h2>Fight</h2>");
+                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " tries to dodge but Fails.<br>Takes " + Math.floor(fightStats.userFighter.power * 0.5) + " damage.");
+            }else{
+                $("#fightArea").html("<h2>Fight</h2>");
+                $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " Dodges the Attack");
+            }
+            fightActions.updateHealth();
         }
-        fightActions.updateHealth();
+        fightActions.checkForWinner();
+        console.log(fightStats);
     }
-    console.log(fightStats);
-
 });
 
 $("#defendBtn").on("click", function(){
+    if(fightStats.fightActive === true){
+        var botMode = fightActions.selectBotFightMode();
+        console.log(botMode);
 
+        if(botMode === "fight"){
+            var damage = fightStats.botFighter.power - Math.floor(((Math.random() * fightStats.userFighter.defense) / 10) * fightStats.botFighter.power);
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You defend the attack and take " + damage + " damage.");
+            fightStats.userFighter.hp = fightStats.userFighter.hp - damage;
+            fightActions.updateHealth();
+        }else if(botMode === "defend"){
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You Both are in a defensive stance.");
+        }else if(botMode === "dodge"){
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You defend while " + fightStats.botFighter.name + " tries to move away.");
+        }
+        fightActions.checkForWinner();
+    }
 });
 
 $("#dodgeBtn").on("click", function(){
+    if(fightStats.fightActive === true){
+        var botMode = fightActions.selectBotFightMode();
+        console.log(botMode);
 
+        if(botMode === "fight"){
+            if(Math.floor((Math.random() * 100) + 1) < 50){
+                fightStats.userFighter.hp = fightStats.userFighter.hp - Math.floor(fightStats.botFighter.power * 0.5);
+                $("#fightArea").html("<h2>Fight</h2>");
+                $("#fightArea").append("<br><br><br>You try to dodge but you are not quick enough.<br>You take " + Math.floor(fightStats.botFighter.power * 0.5) + " damage.");
+            }else{
+                $("#fightArea").html("<h2>Fight</h2>");
+                $("#fightArea").append("<br><br><br>You Dodge " + fightStats.botFighter.name + "'s Attack");
+            }
+            fightActions.updateHealth();
+        }else if(botMode === "defend"){
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You try to anticipate an attack but " + fightStats.botFighter.name + " stays in a defensive stance.");
+        }else if(botMode === "dodge"){
+            $("#fightArea").html("<h2>Fight</h2>");
+            $("#fightArea").append("<br><br><br>You both move way for each other.");
+        }
+        fightActions.checkForWinner();
+    }
 });
 
