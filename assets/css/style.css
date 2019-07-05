@@ -1,3 +1,24 @@
+body {
+    background: url(../images/background.jpg);
+    background-repeat: none;
+    background-color: lightslategray;
+    background-blend-mode: screen;
+    font-family: 'Russo One', sans-serif;    
+    color: white;
+}
+
+h1 {
+    font-size: 70px;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+#fightArea {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
 .fighter{
     position: relative;
     overflow: hidden;

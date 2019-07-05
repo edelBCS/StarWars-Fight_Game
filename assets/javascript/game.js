@@ -202,8 +202,8 @@ $("#fightBtn").on("click", function(){
             fightStats.userFighter.hp = fightStats.userFighter.hp - fightStats.botFighter.power;
             fightStats.botFighter.hp = fightStats.botFighter.hp - (fightStats.userFighter.power * fightStats.userFighter.multiplyer);
             $("#fightArea").html("<h2>Fight</h2>");
-            $("#fightArea").append("<br><br><br>You take " + fightStats.botFighter.power + " damage.");
-            $("#fightArea").append("<br><br><br>" + fightStats.botFighter.name + " takes " + fightStats.userFighter.power * fightStats.userFighter.multiplyer + " damage.");
+            $("#fightArea").append("<br><br>You Attack each other.<br>You take " + fightStats.botFighter.power + " damage.");
+            $("#fightArea").append("<br>" + fightStats.botFighter.name + " takes " + fightStats.userFighter.power * fightStats.userFighter.multiplyer + " damage.");
             fightActions.updateHealth();
         //Bot Blocks
         }else if(botMode === "defend"){
