@@ -1,7 +1,4 @@
-//Create opject fighters that contains 4 sub object, 1 for each fighter
-//create construct object for user fighter and defender
-//create construct object for the fight stats
-
+//Object for fighter stats
 var fighters = {
     "Luke" : {
         "image" : "assets/images/luke-img.jpeg",
@@ -65,8 +62,8 @@ var fightBench = {
 
     //moves fighter from bench to playerArea
     "moveFighterToUser" : function(fighter){
-        $("#" + fighter).fadeOut(1000, function(){
-            $("#" + fighter).prependTo("#playerArea").fadeIn(1000);
+        $("#" + fighter).fadeOut(500, function(){
+            $("#" + fighter).prependTo("#playerArea").fadeIn(500);
         });
         
         fightStats.userFighter = fighters[fighter];
@@ -75,8 +72,8 @@ var fightBench = {
     },
     //move fighter from bench to bot area
     "moveFighterToBot" : function(fighter){
-        $("#" + fighter).fadeOut(1000, function(){
-            $("#" + fighter).prependTo("#botArea").fadeIn(1000);
+        $("#" + fighter).fadeOut(500, function(){
+            $("#" + fighter).prependTo("#botArea").fadeIn(500);
         });
         fightStats.botFighter = fighters[fighter];
         fightStats.fightActive = true;
@@ -106,8 +103,8 @@ var fightActions = {
         //Player Won
         if(fightStats.userFighter.hp > 0 && fightStats.botFighter.hp === 0){
             fightStats.fightActive = false;      
-            $("#" + fightStats.botFighter.name).fadeOut(1000, function(){
-                $("#" + fightStats.botFighter.name).prependTo("#fighterBench").fadeIn(1000);
+            $("#" + fightStats.botFighter.name).fadeOut(500, function(){
+                $("#" + fightStats.botFighter.name).prependTo("#fighterBench").fadeIn(500);
                 $("#" + fightStats.botFighter.name + " #deathX").css("display", "block");
                 fightStats.deadFighters.push(fightStats.botFighter.name);
                 fightStats.botFighter = {};
@@ -139,12 +136,10 @@ var fightActions = {
 
     //cause fighter the blink when taking damage
     "blinkFighter" : function(fighter){
-        $("#" + fighter).fadeOut(100, function(){});     
-        $("#" + fighter).fadeIn(100, function(){});
-        $("#" + fighter).fadeOut(100, function(){});
-        $("#" + fighter).fadeIn(100, function(){});
-        $("#" + fighter).fadeOut(100, function(){});
-        $("#" + fighter).fadeIn(100, function(){});  
+        for(var i = 0; i < 3; ++i){
+            $("#" + fighter).fadeOut(100, function(){});     
+            $("#" + fighter).fadeIn(100, function(){});
+        } 
     }
 }
 
