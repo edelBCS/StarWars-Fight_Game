@@ -41,7 +41,7 @@ var fighters = {
 var fightBench = {
     //loads fighter into the game
     "loadFighter" : function(imgSrc, imgAlt, fighterName, health) {
-        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg mx-auto'></div>");
+        $("#fighterBench").append("<div id='" + fighterName + "' class='fighter rounded-lg mx-auto fighterIcon'></div>");
         $("#" + fighterName).append("<img class='fighterImg' src='" + imgSrc + "' alt='" + imgAlt + "'>");
         $("#" + fighterName).append("<p class='fighterInfo'><Strong class='fighterName'>" + fighterName + "</Strong>  <small>Health: <span id='fighterHealth'>" + health + "</span>HP</small></p>");
         $("#" + fighterName).append("<span id='deathX'>X</span>");
@@ -157,58 +157,20 @@ var fightStats = {
 //Puts fighters on the bench
 fightBench.fillUpBench();
 
-$("#Luke").on("click", function(){
-    console.log(fightStats.deadFighters.indexOf("Luke"));
-    if(fightStats.deadFighters.indexOf("Luke") === -1){
+$(".fighterIcon").on("click", function(){
+    var fighterName = $(this).attr("id");
+    console.log("You Clicked on " + fighterName);
+    if(fightStats.deadFighters.indexOf(fighterName) === -1){
         if(Object.entries(fightStats.userFighter).length === 0){
-            fightBench.moveFighterToUser("Luke");
+            fightBench.moveFighterToUser(fighterName);
         }else if(Object.entries(fightStats.botFighter).length === 0){
-            fightBench.moveFighterToBot("Luke");
+            fightBench.moveFighterToBot(fighterName);
         }
     }else{
         $("#fightArea").html("<h2>Fight</h2>");
         $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
     } 
-});
-
-$("#Obi-Wan").on("click", function(){
-    if(fightStats.deadFighters.indexOf("Obi-Wan") === -1){
-        if(Object.entries(fightStats.userFighter).length === 0){
-            fightBench.moveFighterToUser("Obi-Wan");
-        }else if(Object.entries(fightStats.botFighter).length === 0){
-            fightBench.moveFighterToBot("Obi-Wan");
-        }
-    }else{
-        $("#fightArea").html("<h2>Fight</h2>");
-        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
-    }    
-});
-
-$("#Darth-Maul").on("click", function(){
-    if(fightStats.deadFighters.indexOf("Darth-Maul") === -1){
-        if(Object.entries(fightStats.userFighter).length === 0){
-            fightBench.moveFighterToUser("Darth-Maul");
-        }else if(Object.entries(fightStats.botFighter).length === 0){
-            fightBench.moveFighterToBot("Darth-Maul");
-        }   
-    }else{
-        $("#fightArea").html("<h2>Fight</h2>");
-        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
-    } 
-});
-
-$("#Boba-Fett").on("click", function(){
-    if(fightStats.deadFighters.indexOf("Boba-Fett") === -1){
-        if(Object.entries(fightStats.userFighter).length === 0){
-            fightBench.moveFighterToUser("Boba-Fett");
-        }else if(Object.entries(fightStats.botFighter).length === 0){
-            fightBench.moveFighterToBot("Boba-Fett");
-        }    
-    }else{
-        $("#fightArea").html("<h2>Fight</h2>");
-        $("#fightArea").append("<br><br><br>This Chapion has already been defeated");
-    }
-});
+})
 
 console.log(fightStats);
 
